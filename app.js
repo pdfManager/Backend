@@ -3,18 +3,19 @@ const mongoose = require('mongoose');
 // const signupRouter = require('./Routes/signup');
 const cors = require('cors');
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 const path = require('path');
+require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
-const mongoURI = 'mongodb+srv://hariompatel127:patel786@cluster0.j6ptkee.mongodb.net/'; // Replace with your MongoDB connection string
+// const mongoURI = 'mongodb+srv://hariompatel127:patel786@cluster0.j6ptkee.mongodb.net/'; // Replace with your MongoDB connection string
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-mongoose.connect(mongoURI, options)
+mongoose.connect(process.env.MONGO_URL, options)
   .then(() => {
     console.log('Connected to MongoDB');
   })
