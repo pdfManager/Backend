@@ -45,8 +45,9 @@ router.post('/upload', authMiddleware, upload.single('file'), async (req, res) =
     } else {
       existingFile = new File({
         email,
-        files: [filename],
+        file: [filename],
       });
+     
     }
 
     await existingFile.save();
