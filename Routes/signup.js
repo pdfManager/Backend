@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const User = require('../Models/User');
 
-router.post('/signup', [
+router.post('api/signup', [
   // Validate name (minimum length: 5 characters)
   body('name').trim().isLength({ min: 5 }).withMessage('Name must be at least 5 characters long'),
 

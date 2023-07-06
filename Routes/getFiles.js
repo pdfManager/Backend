@@ -7,8 +7,9 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
-router.get('/getFiles', authMiddleware , async (req, res) => {
- 
+router.get('api/getFiles', authMiddleware , async (req, res) => {
+  
+ console.log("Haan me chalra hu getfiles");
   const userId = req.user;
   const user = await User.findOne({ _id: userId });
   const { email } = user;
@@ -23,13 +24,13 @@ router.get('/getFiles', authMiddleware , async (req, res) => {
     }
   });
 
-router.get('/upload/:fileName', (req, res) => {
+router.get('api/upload/:fileName', (req, res) => {
   const fileName = req.params.fileName;
   const filePath = path.join(__dirname, '../uploads/', fileName); // Adjust the path as per your server setup
   res.sendFile(filePath);
 });
 
-router.delete('/deleteFile/:fileName', authMiddleware, async (req, res) => {
+router.delete('api/deleteFile/:fileName', authMiddleware, async (req, res) => {
   const fileName = req.params.fileName;
   const userId = req.user;
 
@@ -70,7 +71,7 @@ router.delete('/deleteFile/:fileName', authMiddleware, async (req, res) => {
   }
 });
 
-router.post('/generateShareLink', authMiddleware, async (req, res) => {
+router.post('api/generateShareLink', authMiddleware, async (req, res) => {
   const fileName = req.body.fileName;
   const userId = req.user;
   //  console.log("FileName" , fileName);
@@ -107,7 +108,7 @@ router.post('/generateShareLink', authMiddleware, async (req, res) => {
 });
 
 
-router.post('/share', authMiddleware, async (req, res) => {
+router.post('api/share', authMiddleware, async (req, res) => {
 const { email, fileName, senderEmail } = req.body;
   // console.log("Hello", email, fileName, senderEmail);
 

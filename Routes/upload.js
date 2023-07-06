@@ -23,7 +23,7 @@ const upload = multer({ storage });
 
 // Upload route
 // Upload route
-router.post('/upload', authMiddleware, upload.single('file'), async (req, res) => {
+router.post('api/upload', authMiddleware, upload.single('file'), async (req, res) => {
   const userId = req.user;
   const user = await User.findOne({ _id: userId });
 
