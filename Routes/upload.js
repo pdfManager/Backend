@@ -1,4 +1,3 @@
-
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
@@ -12,8 +11,15 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
+    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const timestamp = Date.now();
+    const date = new Date(timestamp);
+
+   
+    const uniqueSuffix = date.toLocaleDateString().replace(/\//g, '-');
+ 
+    cb(null, uniqueSuffix + '-' + file.originalname );
+    // cb(null, file.originalname);
   }
 
 });
@@ -23,7 +29,7 @@ const upload = multer({ storage });
 
 // Upload route
 // Upload route
-router.post('api/upload', authMiddleware, upload.single('file'), async (req, res) => {
+router.post('/upload', authMiddleware, upload.single('file'), async (req, res) => {
   const userId = req.user;
   const user = await User.findOne({ _id: userId });
 
@@ -35,7 +41,8 @@ router.post('api/upload', authMiddleware, upload.single('file'), async (req, res
   }
 
   const { email } = user; // Access the email property of the user
-  const { filename } = req.file;
+  const { filename, originalname } = req.file;
+  console.log("original name", originalname)
 
   try {
     let existingFile = await File.findOne({ email });
@@ -47,13 +54,13 @@ router.post('api/upload', authMiddleware, upload.single('file'), async (req, res
         email,
         file: [filename],
       });
-     
+
     }
 
     await existingFile.save();
 
     // res.json({ message: 'File uploaded successfully' });
-    res.json({filename });
+    res.json({ filename: originalname });
   } catch (error) {
     console.error('Error uploading file:', error);
     res.status(500).json({ error: 'An error occurred during file upload' });
